@@ -205,6 +205,16 @@
     inset 0 8px 16px 0 rgba(255, 255, 255, 0.5);
 }
 
+.clay-card-green {
+  background-color: #def7ec;
+  border: 3px solid #eefdf6;
+  border-radius: 2rem;
+  box-shadow: 
+    0 12px 0 0 #bceecc,
+    inset 0 -8px 16px 0 rgba(3, 84, 63, 0.06),
+    inset 0 8px 16px 0 rgba(255, 255, 255, 0.5);
+}
+
 /* 3D Volumetric squircle icon containers */
 .clay-icon-purple {
   background-color: #9c83f3;
@@ -242,6 +252,16 @@
   border-radius: 1.15rem;
   box-shadow: 
     0 4px 0 0 #2563eb,
+    inset 0 -3px 6px 0 rgba(0, 0, 0, 0.15),
+    inset 0 3px 6px 0 rgba(255, 255, 255, 0.3);
+}
+
+.clay-icon-green {
+  background-color: #0e9f6e;
+  border: 2px solid #31c48d;
+  border-radius: 1.15rem;
+  box-shadow: 
+    0 4px 0 0 #057a55,
     inset 0 -3px 6px 0 rgba(0, 0, 0, 0.15),
     inset 0 3px 6px 0 rgba(255, 255, 255, 0.3);
 }
@@ -331,4 +351,13 @@ input[type="checkbox"],
 input[type="radio"],
 [role="button"] {
   cursor: pointer !important;
+}
+
+/* Hide scrollbars class */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

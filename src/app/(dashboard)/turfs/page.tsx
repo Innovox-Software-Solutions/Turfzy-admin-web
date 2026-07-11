@@ -123,7 +123,7 @@ export default function TurfsPage() {
           </div>
 
           {/* Status Filter */}
-          <div className="flex gap-2 w-full md:w-auto overflow-x-auto py-2.5 px-1 -my-2.5">
+          <div className="flex gap-2 w-full md:w-auto overflow-x-auto no-scrollbar py-2.5 px-1 -my-2.5">
             {([
               { label: "All Status", value: "ALL" },
               { label: "Pending Approval", value: "PENDING_APPROVAL" },

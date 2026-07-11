@@ -1,7 +1,23 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect } from "react";
 import Link from "next/link";
+import { useBookingsStore } from "@/store/bookings.store";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  CircleDollarSign,
+  User,
+  MapPin,
+  Building,
+  CreditCard,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Hash,
+  Laptop,
+} from "lucide-react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -9,18 +25,347 @@ interface PageProps {
 
 export default function BookingDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
+  const bookingId = resolvedParams.id;
+
+  const {
+    selectedBooking,
+    isLoading,
+    isActionLoading,
+    fetchBookingDetails,
+    markNoShow,
+    clearSelectedBooking,
+  } = useBookingsStore();
+
+  useEffect(() => {
+    fetchBookingDetails(bookingId);
+    return () => {
+      clearSelectedBooking();
+    };
+  }, [bookingId, fetchBookingDetails, clearSelectedBooking]);
+
+  const handleMarkNoShow = async () => {
+    if (confirm("Are you sure you want to mark this booking's customer as a No-Show?")) {
+      await markNoShow(bookingId);
+    }
+  };
+
+  if (isLoading && !selectedBooking) {
+    return (
+      <div className="py-24 text-center">
+        <div className="h-9 w-9 animate-spin rounded-full border-4 border-purple-600 border-t-transparent mx-auto" />
+        <p className="text-xs font-bold text-[#8a7fa8] mt-3 animate-pulse">Loading booking details...</p>
+      </div>
+    );
+  }
+
+  if (!selectedBooking) {
+    return (
+      <div className="py-24 text-center space-y-4">
+        <p className="text-sm font-bold text-[#8a7fa8]">Booking record not found.</p>
+        <Link href="/bookings" className="clay-btn-purple py-2 px-5 text-xs font-extrabold shadow-[0_4px_0_#7c62db] inline-block">
+          Back to Bookings
+        </Link>
+      </div>
+    );
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "CONFIRMED":
+      case "COMPLETED":
+        return "text-emerald-600 bg-emerald-50 border-emerald-100";
+      case "PENDING_APPROVAL":
+      case "PENDING":
+        return "text-amber-600 bg-amber-50 border-amber-100";
+      case "CANCELLED":
+        return "text-rose-600 bg-rose-50 border-rose-100";
+      case "NO_SHOW":
+        return "text-purple-600 bg-purple-50 border-purple-100";
+      default:
+        return "text-gray-600 bg-gray-50 border-gray-100";
+    }
+  };
+
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case "PAID":
+        return "text-emerald-600 bg-emerald-50 border-emerald-100";
+      case "PENDING":
+        return "text-amber-600 bg-amber-50 border-amber-100";
+      case "FAILED":
+        return "text-rose-600 bg-rose-50 border-rose-100";
+      case "REFUNDED":
+        return "text-blue-600 bg-blue-50 border-blue-100";
+      default:
+        return "text-gray-600 bg-gray-50 border-gray-100";
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-[#241c3d]">Booking Details</h2>
-        <p className="text-xs text-[#8a7fa8] mt-0.5">Detailed view for booking reference {resolvedParams.id}</p>
-      </div>
-      <div className="rounded-3xl border border-[#ece8f8] bg-white p-8 shadow-sm">
-        <p className="text-sm font-semibold text-[#8a7fa8]">Detailed transaction list and activity logging for booking {resolvedParams.id} is coming soon.</p>
-        <Link href="/bookings" className="mt-4 inline-block text-xs font-bold text-purple-600 hover:text-purple-700">
-          &larr; Back to Bookings
+    <div className="space-y-7 pb-12 text-left">
+      {/* Page Header */}
+      <div className="flex items-center gap-3">
+        <Link href="/bookings" className="p-2 rounded-xl bg-[#f8f7fd] border-2 border-[#f1effb] hover:bg-[#f3effc] transition-colors">
+          <ArrowLeft className="h-4.5 w-4.5 text-[#5b4e79]" />
         </Link>
+        <div>
+          <h2 className="text-2xl font-black text-[#241c3d]">Booking Audit</h2>
+          <p className="text-xs text-[#8a7fa8] mt-0.5 font-bold">Review payment status, check-in logs, and cancellation reasons</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-7">
+        {/* Left Columns (Booking Info & Pricing) */}
+        <div className="lg:col-span-2 space-y-6">
+          
+          {/* Main Info Card */}
+          <div className="clay-card-white p-6 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#f1effb] pb-4">
+              <div className="flex items-center gap-2">
+                <Hash className="h-5 w-5 text-purple-500" />
+                <div>
+                  <p className="text-xs text-[#8a7fa8] font-bold">Booking Reference</p>
+                  <p className="text-sm font-black text-[#241c3d] tracking-wider uppercase">{selectedBooking.id}</p>
+                </div>
+              </div>
+              
+              <div className="flex gap-2">
+                <span className={`rounded-full px-3 py-1 text-[10px] font-extrabold border ${getStatusColor(selectedBooking.bookingStatus)}`}>
+                  {selectedBooking.bookingStatus}
+                </span>
+                <span className={`rounded-full px-3 py-1 text-[10px] font-extrabold border ${getPaymentStatusColor(selectedBooking.paymentStatus)}`}>
+                  Payment: {selectedBooking.paymentStatus}
+                </span>
+              </div>
+            </div>
+
+            {/* Timing Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                  <Calendar className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-[#8a7fa8] font-bold uppercase">Booking Date</p>
+                  <p className="text-xs font-black text-[#241c3d] mt-0.5">
+                    {new Date(selectedBooking.bookingDate).toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                  <Clock className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-[#8a7fa8] font-bold uppercase">Slot Interval</p>
+                  <p className="text-xs font-black text-[#241c3d] mt-0.5">
+                    {selectedBooking.startTime} - {selectedBooking.endTime}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                  <Clock className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-[#8a7fa8] font-bold uppercase">Duration</p>
+                  <p className="text-xs font-black text-[#241c3d] mt-0.5">
+                    {selectedBooking.durationMins} minutes
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Pricing breakdown details */}
+          <div className="clay-card-white p-6 space-y-4">
+            <h3 className="text-sm font-extrabold text-[#241c3d] flex items-center gap-2">
+              <CircleDollarSign className="h-4.5 w-4.5 text-purple-500" />
+              Financial Aggregates
+            </h3>
+
+            <div className="border border-[#f1effb] rounded-2xl overflow-hidden text-xs">
+              <div className="bg-[#f8f7fd] px-4 py-3 border-b border-[#f1effb] flex justify-between font-bold text-[#8a7fa8] uppercase text-[10px]">
+                <span>Description</span>
+                <span>Amount</span>
+              </div>
+              <div className="p-4 space-y-3 font-semibold text-[#5b4e79]">
+                <div className="flex justify-between">
+                  <span>Ground Charge (Owner Share)</span>
+                  <span className="font-extrabold text-[#241c3d]">₹{selectedBooking.groundCharge}</span>
+                </div>
+                <div className="flex justify-between border-t border-[#f8f7fd] pt-2">
+                  <span>Platform Fee (Booking Charge)</span>
+                  <span className="font-extrabold text-[#241c3d]">₹{selectedBooking.platformFee}</span>
+                </div>
+                <div className="flex justify-between border-t border-[#f8f7fd] pt-2">
+                  <span>Deposit Amount</span>
+                  <span className="font-extrabold text-[#241c3d]">₹{selectedBooking.depositAmount}</span>
+                </div>
+                <div className="flex justify-between border-t-2 border-[#f1effb] pt-3 font-black text-sm text-[#241c3d]">
+                  <span>Total Amount Paid</span>
+                  <span className="text-purple-600">₹{selectedBooking.amount}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cancellation Reason details */}
+          {selectedBooking.bookingStatus === "CANCELLED" && (
+            <div className="clay-card-white p-6 border-2 border-rose-100 bg-rose-50/10 space-y-3 text-left">
+              <h3 className="text-sm font-extrabold text-rose-950 flex items-center gap-2">
+                <XCircle className="h-4.5 w-4.5 text-rose-600" />
+                Cancellation Reference Details
+              </h3>
+              <div className="text-xs space-y-2 text-rose-900 font-bold">
+                <p>
+                  Reason: <span className="font-extrabold text-rose-950">{selectedBooking.cancelReason || "User Cancellation"}</span>
+                </p>
+                {selectedBooking.cancelledAt && (
+                  <p className="text-[11px] text-rose-700">
+                    Cancelled Date: {new Date(selectedBooking.cancelledAt).toLocaleString()}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Gateway audit trail */}
+          <div className="clay-card-white p-6 space-y-4">
+            <h3 className="text-sm font-extrabold text-[#241c3d] flex items-center gap-2">
+              <CreditCard className="h-4.5 w-4.5 text-purple-500" />
+              Gateway & Transaction Audit Trails
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-[#5b4e79]">
+              <div className="p-3 bg-[#f8f7fd] border border-[#f1effb] rounded-xl space-y-1">
+                <p className="text-[9px] font-bold text-[#8a7fa8] uppercase">Razorpay Order ID</p>
+                <p className="font-mono text-[#241c3d] break-all">{selectedBooking.razorpayOrderId || "N/A"}</p>
+              </div>
+              <div className="p-3 bg-[#f8f7fd] border border-[#f1effb] rounded-xl space-y-1">
+                <p className="text-[9px] font-bold text-[#8a7fa8] uppercase">Razorpay Payment ID</p>
+                <p className="font-mono text-[#241c3d] break-all">{selectedBooking.razorpayPaymentId || "N/A"}</p>
+              </div>
+              {selectedBooking.razorpayRefundId && (
+                <div className="col-span-1 sm:col-span-2 p-3 bg-blue-50/30 border border-blue-100 rounded-xl space-y-1">
+                  <p className="text-[9px] font-bold text-[#8a7fa8] uppercase">Razorpay Refund ID</p>
+                  <p className="font-mono text-blue-900 break-all">{selectedBooking.razorpayRefundId}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Right Column (User, Turf & Actions) */}
+        <div className="space-y-6">
+          
+          {/* Customer Profile Card */}
+          <div className="clay-card-white p-6 space-y-4 text-left">
+            <h3 className="text-sm font-extrabold text-[#241c3d] flex items-center gap-2">
+              <User className="h-4.5 w-4.5 text-purple-500" />
+              Customer Profile
+            </h3>
+            
+            <div className="space-y-3 pt-1 text-xs">
+              <div>
+                <p className="text-[9px] font-black text-[#8a7fa8] uppercase">Name</p>
+                <p className="font-extrabold text-[#241c3d] mt-0.5">
+                  {selectedBooking.user?.userProfile?.name || "Customer Account"}
+                </p>
+              </div>
+              <div className="border-t border-[#f8f7fd] pt-2.5">
+                <p className="text-[9px] font-black text-[#8a7fa8] uppercase">Phone number</p>
+                <p className="font-extrabold text-[#241c3d] mt-0.5">{selectedBooking.user?.phone}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Turf details card */}
+          <div className="clay-card-white p-6 space-y-4 text-left">
+            <h3 className="text-sm font-extrabold text-[#241c3d] flex items-center gap-2">
+              <Building className="h-4.5 w-4.5 text-purple-500" />
+              Turf Venue Reference
+            </h3>
+            
+            <div className="space-y-3 pt-1 text-xs">
+              <div>
+                <p className="text-[9px] font-black text-[#8a7fa8] uppercase">Name</p>
+                <p className="font-extrabold text-[#241c3d] mt-0.5">{selectedBooking.turf?.name}</p>
+              </div>
+              <div className="border-t border-[#f8f7fd] pt-2.5">
+                <p className="text-[9px] font-black text-[#8a7fa8] uppercase">City</p>
+                <p className="font-extrabold text-[#241c3d] mt-0.5">{selectedBooking.turf?.city}</p>
+              </div>
+              <div className="border-t border-[#f8f7fd] pt-2.5">
+                <p className="text-[9px] font-black text-[#8a7fa8] uppercase">Owner / Partner</p>
+                <p className="font-extrabold text-[#241c3d] mt-0.5">{selectedBooking.turf?.owner?.name}</p>
+                <p className="text-[10px] text-[#5b4e79] font-bold mt-0.5">{selectedBooking.turf?.owner?.contactNumber}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Control Panel */}
+          {selectedBooking.bookingStatus === "CONFIRMED" && (
+            <div className="clay-card-white p-6 space-y-4 text-left">
+              <h3 className="text-sm font-extrabold text-[#241c3d] flex items-center gap-2">
+                <AlertCircle className="h-4.5 w-4.5 text-purple-500" />
+                Administrative Controls
+              </h3>
+              
+              <button
+                onClick={handleMarkNoShow}
+                disabled={isActionLoading}
+                className="w-full clay-btn-purple py-2.5 text-xs font-extrabold flex items-center justify-center gap-2 shadow-[0_4px_0_#7c62db] bg-rose-600 hover:bg-rose-700 text-white border-rose-500 shadow-rose-950 transition-all disabled:opacity-50"
+              >
+                <XCircle className="h-4.5 w-4.5" />
+                Mark as No-Show
+              </button>
+            </div>
+          )}
+
+          {/* Checkin logs */}
+          {selectedBooking.visitedAt && (
+            <div className="clay-card-white p-6 space-y-4 text-left">
+              <h3 className="text-sm font-extrabold text-[#241c3d] flex items-center gap-2">
+                <Laptop className="h-4.5 w-4.5 text-purple-500" />
+                Check-in / Verification Logs
+              </h3>
+              
+              <div className="space-y-3 pt-1 text-xs">
+                <div>
+                  <p className="text-[9px] font-black text-[#8a7fa8] uppercase">Checked In At</p>
+                  <p className="font-extrabold text-emerald-600 mt-0.5">
+                    {new Date(selectedBooking.visitedAt).toLocaleString()}
+                  </p>
+                </div>
+                {selectedBooking.scannedDevice && (
+                  <div className="border-t border-[#f8f7fd] pt-2.5">
+                    <p className="text-[9px] font-black text-[#8a7fa8] uppercase">Scanned Device</p>
+                    <p className="font-mono text-[10px] text-[#241c3d] mt-0.5 break-all">
+                      {selectedBooking.scannedDevice}
+                    </p>
+                  </div>
+                )}
+                {selectedBooking.scanIpAddress && (
+                  <div className="border-t border-[#f8f7fd] pt-2.5">
+                    <p className="text-[9px] font-black text-[#8a7fa8] uppercase">IP Address</p>
+                    <p className="font-mono text-[10px] text-[#241c3d] mt-0.5">
+                      {selectedBooking.scanIpAddress}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+        </div>
       </div>
     </div>
   );
