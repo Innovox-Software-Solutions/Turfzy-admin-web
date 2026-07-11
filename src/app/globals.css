@@ -319,3 +319,16 @@
   animation: wave 1.8s infinite;
   transform-origin: 70% 70%;
 }
+
+/* Force pointer cursor on all interactive/clickable elements globally */
+button,
+a,
+select,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+[role="button"] {
+  cursor: pointer !important;
+}

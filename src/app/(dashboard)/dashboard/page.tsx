@@ -347,7 +347,7 @@ export default function DashboardPage() {
             <p className="text-[11px] text-[#8a7fa8] mt-0.5 font-semibold">Distribution of users by urban areas</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 flex-1">
+          <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-center justify-between gap-5 py-4 flex-1 w-full">
             <div className="h-36 w-36 relative flex items-center justify-center flex-shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -403,7 +403,7 @@ export default function DashboardPage() {
             </div>
 
             {/* City legends styled like Top Genres */}
-            <div className="space-y-2 text-left flex-1 pl-2 w-full">
+            <div className="space-y-2 text-left flex-1 pl-4 xl:pl-6 w-full lg:mt-4 xl:mt-0">
               {bookingsByCity.map((item, index) => (
                 <div key={item.name} className="flex items-center justify-between text-[11px]">
                   <div className="flex items-center gap-2">

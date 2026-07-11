@@ -140,7 +140,7 @@ export default function UsersPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+        <div className="flex gap-2 w-full md:w-auto overflow-x-auto py-2.5 px-1 -my-2.5">
           {(["All", "Active", "Blocked", "Inactive"] as const).map((tab) => {
             const isTabActive = filter === tab;
             return (
