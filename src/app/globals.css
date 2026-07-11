@@ -353,11 +353,11 @@ input[type="radio"],
   cursor: pointer !important;
 }
 
-/* Hide scrollbars class */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Hide scrollbars globally */
+::-webkit-scrollbar {
+  display: none !important;
 }
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+* {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
 }
