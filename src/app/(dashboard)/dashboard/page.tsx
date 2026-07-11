@@ -341,18 +341,17 @@ export default function DashboardPage() {
         </div>
 
         {/* Bookings by City Donut Chart */}
-        <div className="lg:col-span-4 clay-card-white p-6 flex flex-col justify-between">
+        <div className="lg:col-span-4 clay-card-white p-6 flex flex-col justify-between overflow-hidden">
           <div>
             <h3 className="text-base font-extrabold text-[#241c3d]">Top Genres</h3>
             <p className="text-[11px] text-[#8a7fa8] mt-0.5 font-semibold">Distribution of users by urban areas</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-center justify-between gap-5 py-4 flex-1 w-full">
+          <div className="flex items-center justify-center py-4 flex-1">
             <div className="h-36 w-36 relative flex items-center justify-center flex-shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <defs>
-                    {/* Reuse color gradients defined in Bar Chart or add specifically */}
                     <linearGradient id="pieGrad-0" x1="0" y1="0" x2="1" y2="1">
                       <stop offset="0%" stopColor="#c7b3ff" />
                       <stop offset="100%" stopColor="#7c5beb" />
@@ -401,22 +400,22 @@ export default function DashboardPage() {
                 <p className="text-base font-black text-[#241c3d]">100%</p>
               </div>
             </div>
+          </div>
 
-            {/* City legends styled like Top Genres */}
-            <div className="space-y-2 text-left flex-1 pl-4 xl:pl-6 w-full lg:mt-4 xl:mt-0">
-              {bookingsByCity.map((item, index) => (
-                <div key={item.name} className="flex items-center justify-between text-[11px]">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="h-2.5 w-2.5 rounded-full border border-white shadow-sm"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <span className="font-bold text-[#5b4e79]">{item.name}</span>
-                  </div>
-                  <span className="font-extrabold text-[#241c3d]">{item.value}%</span>
+          {/* City legends */}
+          <div className="space-y-2.5 pt-4 border-t-2 border-[#f1effb]">
+            {bookingsByCity.map((item) => (
+              <div key={item.name} className="flex items-center justify-between text-[11px]">
+                <div className="flex items-center gap-2">
+                  <span
+                    className="h-2.5 w-2.5 rounded-full border border-white shadow-sm flex-shrink-0"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span className="font-bold text-[#5b4e79]">{item.name}</span>
                 </div>
-              ))}
-            </div>
+                <span className="font-extrabold text-[#241c3d] tabular-nums">{item.value}%</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
