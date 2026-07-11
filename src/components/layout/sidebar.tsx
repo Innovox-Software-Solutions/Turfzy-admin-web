@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -55,7 +56,14 @@ export default function Sidebar() {
 
   const { user, logout } = useAuthStore();
 
-  const handleLogout = async () => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogoutAction = async () => {
+    setShowLogoutConfirm(false);
     try {
       await logout();
       toast.success("Successfully logged out");
@@ -74,7 +82,7 @@ export default function Sidebar() {
     { name: "Settlements", href: "/settlements", icon: Coins },
     { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: "Platform Fees", href: "/platform-fees", icon: Receipt },
-    { name: "Notifications", href: "/notifications", icon: Bell, badge: 8 },
+    { name: "Notifications", href: "/notifications", icon: Bell },
     { name: "Settings", href: "/settings", icon: Settings },
     { name: "Audit Logs", href: "/audit-logs", icon: History },
     { name: "Profile", href: "/profile", icon: User },
@@ -185,6 +193,41 @@ export default function Sidebar() {
           </div>
         </div>
       </aside>
+
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-purple-950/40 backdrop-blur-sm p-4 text-left">
+          <div className="bg-white rounded-[2rem] border-4 border-[#f1effb] shadow-[0_12px_24px_rgba(36,28,61,0.15),inset_0_-8px_0_#ece8f8] max-w-sm w-full p-6 text-center space-y-5 animate-scale-up">
+            {/* Header Icon */}
+            <div className="mx-auto w-14 h-14 rounded-2xl bg-red-50 border-2 border-red-100 flex items-center justify-center text-red-500 shadow-[inset_0_-3px_0_rgba(239,68,68,0.2)]">
+              <LogOut className="h-6 w-6 animate-pulse" />
+            </div>
+            
+            {/* Text details */}
+            <div className="space-y-1.5">
+              <h4 className="text-sm font-black text-[#241c3d]">Confirm Sign Out</h4>
+              <p className="text-xs text-[#8a7fa8] font-bold leading-relaxed">
+                Are you sure you want to log out of the Turfzy Admin Panel? Your active session will be ended.
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="w-full py-2.5 rounded-xl border-2 border-[#f1effb] bg-[#f8f7fd] text-[#5b4e79] hover:bg-[#f3effc] font-black text-xs transition-all shadow-[0_4px_0_#ece8f8] active:translate-y-0.5"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmLogoutAction}
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-black text-xs transition-all shadow-[0_4px_0_#b91c1c] active:translate-y-0.5"
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

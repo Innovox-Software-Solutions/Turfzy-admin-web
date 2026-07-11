@@ -42,9 +42,6 @@ export default function Header() {
         {/* Notifications Icon with Badge */}
         <button className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-white border-2 border-[#f1effb] text-[#5b4e79] shadow-[0_4px_0_#e4e2f2] hover:bg-[#f6f4fd] active:translate-y-0.5 active:shadow-[0_2px_0_#e4e2f2] transition-all">
           <Bell className="h-5 w-5" />
-          <span className="absolute right-1 top-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[#ff4d6a] text-[8px] font-extrabold text-white border border-white">
-            8
-          </span>
         </button>
 
         {/* User profile avatar */}
