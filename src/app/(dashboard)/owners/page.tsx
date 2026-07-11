@@ -174,12 +174,12 @@ export default function OwnersPage() {
               <table className="w-full border-collapse text-left">
                 <thead>
                   <tr className="border-b-2 border-[#f1effb] pb-3">
-                    <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Owner</th>
-                    <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Contact</th>
-                    <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Turfs Owned</th>
-                    <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Total Earnings</th>
-                    <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Joined Date</th>
-                    <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Status</th>
+                    <th className="pb-4 pr-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Owner</th>
+                    <th className="pb-4 pr-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Contact</th>
+                    <th className="pb-4 pr-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Turfs Owned</th>
+                    <th className="pb-4 pr-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Total Earnings</th>
+                    <th className="pb-4 pr-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Joined Date</th>
+                    <th className="pb-4 pr-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Status</th>
                     <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase text-right">Actions</th>
                   </tr>
                 </thead>
@@ -202,16 +202,18 @@ export default function OwnersPage() {
 
                     return (
                       <tr key={owner.id} className="hover:bg-[#faf9fd]/50 transition-colors">
-                        <td className="py-4 flex items-center gap-3">
-                          <div className="h-10 w-10 overflow-hidden rounded-2xl border-2 border-white bg-white/40 shadow-sm flex-shrink-0">
-                            <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-extrabold text-[#241c3d]">{name}</p>
-                            <p className="text-[10px] font-bold text-[#8a7fa8] mt-0.5">{owner.id}</p>
+                        <td className="py-4 pr-4">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 overflow-hidden rounded-2xl border-2 border-white bg-white/40 shadow-sm flex-shrink-0">
+                              <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-extrabold text-[#241c3d]">{name}</p>
+                              <p className="text-[10px] font-bold text-[#8a7fa8] mt-0.5">{owner.id}</p>
+                            </div>
                           </div>
                         </td>
-                        <td className="py-4">
+                        <td className="py-4 pr-4">
                           <div className="space-y-1">
                             <p className="text-[11px] text-[#5b4e79] font-bold flex items-center gap-1.5">
                               <Mail className="h-3.5 w-3.5 text-[#a79fc0] flex-shrink-0" />
@@ -223,16 +225,16 @@ export default function OwnersPage() {
                             </p>
                           </div>
                         </td>
-                        <td className="py-4 text-xs font-extrabold text-[#241c3d]">
+                        <td className="py-4 pr-4 text-xs font-extrabold text-[#241c3d]">
                           {turfsOwned} turfs
                         </td>
-                        <td className="py-4 text-xs font-black text-[#241c3d]">
+                        <td className="py-4 pr-4 text-xs font-black text-[#241c3d]">
                           ₹{totalEarnings.toLocaleString()}
                         </td>
-                        <td className="py-4 text-[11px] text-[#8a7fa8] font-bold">
+                        <td className="py-4 pr-4 text-[11px] text-[#8a7fa8] font-bold">
                           {formatDate(owner.createdAt)}
                         </td>
-                        <td className="py-4">
+                        <td className="py-4 pr-4">
                           <span className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] font-extrabold border ${statusClass}`}>
                             {statusLabel}
                           </span>
