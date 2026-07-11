@@ -435,7 +435,7 @@ export default function DashboardPage() {
           <div className="space-y-4.5">
             {recentBookings.map((booking) => (
               <div key={booking.id} className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3.5">
+                <div className="flex items-center gap-3.5 min-w-0">
                   <div className="h-11 w-11 overflow-hidden rounded-2xl border-2 border-[#f1effb] shadow-md flex-shrink-0 bg-purple-50">
                     <img
                       src={booking.image}
@@ -443,13 +443,13 @@ export default function DashboardPage() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="text-left">
-                    <p className="text-xs font-extrabold text-[#241c3d]">{booking.turf}</p>
-                    <p className="text-[10px] font-bold text-[#8a7fa8] mt-0.5">{booking.city} · {booking.id}</p>
+                  <div className="text-left min-w-0">
+                    <p className="text-xs font-extrabold text-[#241c3d] truncate">{booking.turf}</p>
+                    <p className="text-[10px] font-bold text-[#8a7fa8] mt-0.5 truncate">{booking.city} · {booking.id}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 flex-shrink-0">
                   <div className="text-right hidden sm:block">
                     <p className="text-xs font-black text-[#241c3d]">{booking.price}</p>
                     <span className="inline-block text-[9px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 mt-0.5">

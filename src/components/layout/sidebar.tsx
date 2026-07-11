@@ -82,10 +82,9 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar Container */}
       <aside
         className={`fixed top-4 bottom-4 left-4 z-50 flex w-72 flex-col justify-between px-5 py-6 transition-transform duration-300 lg:static lg:translate-x-0 clay-sidebar text-white ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:flex"
+          sidebarOpen ? "translate-x-0" : "-translate-x-[calc(100%+24px)] lg:translate-x-0"
         }`}
       >
         {/* Top Header & Navigation Container */}
