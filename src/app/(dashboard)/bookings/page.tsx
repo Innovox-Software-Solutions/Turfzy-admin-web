@@ -495,7 +495,7 @@ export default function BookingsPage() {
                         onClick={() => router.push(`/bookings/${booking.id}`)}
                         className="clay-btn-purple py-1.5 px-4 text-xs font-extrabold shadow-[0_4px_0_#7c62db]"
                       >
-                        Audit
+                        View
                       </button>
                     </td>
                   </tr>
