@@ -81,14 +81,14 @@ export default function SettlementsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7 pb-12 text-left">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-[#241c3d]">Payout Settlements</h2>
-          <p className="text-xs text-[#8a7fa8] mt-0.5">Manage bank transfer distributions and payout status</p>
+          <h2 className="text-2xl font-black text-[#241c3d]">Payout Settlements</h2>
+          <p className="text-xs text-[#8a7fa8] mt-0.5 font-bold">Manage bank transfer distributions and payout status</p>
         </div>
-        <button className="flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-purple-500/20 hover:brightness-105 active:scale-[0.98] transition-all">
+        <button className="clay-btn-purple px-5 py-2.5 text-xs font-extrabold flex items-center gap-1.5 shadow-[0_5px_0_#7c62db]">
           <Plus className="h-4 w-4" />
           Create Settlement
         </button>
@@ -96,37 +96,37 @@ export default function SettlementsPage() {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl p-5 border border-[#ece8f8] flex items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+        <div className="clay-card-yellow p-5 flex items-center gap-4 text-[#241c3d]">
+          <div className="h-10 w-10 flex items-center justify-center text-white clay-icon-yellow">
             <PiggyBank className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-[#8a7fa8] uppercase">Pending Settlements</p>
-            <p className="text-xl font-extrabold text-[#241c3d] mt-0.5">₹48,000</p>
+            <p className="text-[10px] font-bold text-amber-955 uppercase">Pending Settlements</p>
+            <p className="text-xl font-black text-[#241c3d] mt-0.5">₹48,000</p>
           </div>
         </div>
-        <div className="bg-white rounded-2xl p-5 border border-[#ece8f8] flex items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+        <div className="clay-card-blue p-5 flex items-center gap-4 text-[#241c3d]">
+          <div className="h-10 w-10 flex items-center justify-center text-white clay-icon-blue">
             <Landmark className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-[#8a7fa8] uppercase">Settled Today</p>
-            <p className="text-xl font-extrabold text-[#241c3d] mt-0.5">₹1,20,000</p>
+            <p className="text-[10px] font-bold text-blue-950 uppercase">Settled Today</p>
+            <p className="text-xl font-black text-[#241c3d] mt-0.5">₹1,20,000</p>
           </div>
         </div>
-        <div className="bg-white rounded-2xl p-5 border border-[#ece8f8] flex items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
+        <div className="clay-card-purple p-5 flex items-center gap-4 text-[#241c3d]">
+          <div className="h-10 w-10 flex items-center justify-center text-white clay-icon-purple">
             <RefreshCw className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-[#8a7fa8] uppercase">Last Sync Date</p>
-            <p className="text-xs font-bold text-[#241c3d] mt-1.5">2 min ago</p>
+            <p className="text-[10px] font-bold text-[#5b4e79] uppercase">Last Sync Date</p>
+            <p className="text-xs font-black text-[#241c3d] mt-1.5">2 min ago</p>
           </div>
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-[#ece8f8] flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="clay-card-white p-4.5 flex flex-col md:flex-row gap-4 items-center justify-between">
         {/* Search */}
         <div className="relative w-full md:max-w-xs">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a79fc0]" />
@@ -135,70 +135,73 @@ export default function SettlementsPage() {
             placeholder="Search bank name, owner, turf..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-[#ece8f8] py-2 pl-10 pr-4 text-xs text-[#1e1b33] outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/10"
+            className="w-full clay-input py-2 pl-10 pr-4 text-xs text-[#1e1b33] placeholder:text-[#a79fc0]"
           />
         </div>
 
         {/* Filters */}
         <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-          {(["All", "Paid", "Pending"] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setFilter(tab)}
-              className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
-                filter === tab
-                  ? "bg-purple-600 text-white shadow-md shadow-purple-500/10"
-                  : "bg-[#f8f7fd] text-[#5b4e79] hover:bg-[#f3effc]"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          {(["All", "Paid", "Pending"] as const).map((tab) => {
+            const isTabActive = filter === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => setFilter(tab)}
+                className={`px-4 py-2 text-xs font-extrabold transition-all duration-150 ${
+                  isTabActive
+                    ? "clay-btn-purple shadow-[0_4px_0_#7c62db]"
+                    : "rounded-xl bg-[#f8f7fd] border-2 border-[#f1effb] text-[#5b4e79] hover:bg-[#f3effc]"
+                }`}
+              >
+                {tab}
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {/* Settlements Table / Cards */}
-      <div className="bg-white rounded-3xl border border-[#ece8f8] overflow-hidden shadow-sm">
+      <div className="clay-card-white overflow-hidden p-6">
         {/* Desktop View */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-[#f6f4fd] bg-[#faf9fe]">
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Settlement ID</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Owner</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Turf</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Bank Account</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Payout Amount</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Date</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Status</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase text-right">Actions</th>
+              <tr className="border-b-2 border-[#f1effb] pb-3">
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Settlement ID</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Owner</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Turf</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Bank Account</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Payout Amount</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Date</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Status</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#f6f4fd]">
+            <tbody className="divide-y divide-[#f1effb]">
               {filteredSettlements.map((s) => (
-                <tr key={s.id} className="hover:bg-[#fcfbfe] transition-colors">
-                  <td className="px-6 py-4 text-xs font-bold text-[#241c3d]">{s.id}</td>
-                  <td className="px-6 py-4 text-xs font-bold text-[#5b4e79]">{s.ownerName}</td>
-                  <td className="px-6 py-4 text-xs text-[#241c3d] font-bold">{s.turfName}</td>
-                  <td className="px-6 py-4">
-                    <p className="text-xs font-bold text-[#241c3d]">{s.bankName}</p>
-                    <p className="text-[10px] text-[#8a7fa8] mt-0.5">{s.accountNo}</p>
+                <tr key={s.id} className="hover:bg-[#faf9fd]/50 transition-colors">
+                  <td className="py-4 text-xs font-extrabold text-[#241c3d]">{s.id}</td>
+                  <td className="py-4 text-xs font-bold text-[#5b4e79]">{s.ownerName}</td>
+                  <td className="py-4 text-xs text-[#241c3d] font-extrabold">{s.turfName}</td>
+                  <td className="py-4">
+                    <p className="text-xs font-extrabold text-[#241c3d]">{s.bankName}</p>
+                    <p className="text-[10px] font-bold text-[#8a7fa8] mt-0.5">{s.accountNo}</p>
                   </td>
-                  <td className="px-6 py-4 text-xs font-black text-[#241c3d]">{s.amount}</td>
-                  <td className="px-6 py-4 text-xs text-[#8a7fa8] font-medium">{s.payoutDate}</td>
-                  <td className="px-6 py-4">
+                  <td className="py-4 text-xs font-black text-[#241c3d]">{s.amount}</td>
+                  <td className="py-4 text-[11px] text-[#8a7fa8] font-bold">{s.payoutDate}</td>
+                  <td className="py-4">
                     <span
-                      className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
+                      className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] font-extrabold border ${
                         s.status === "Paid"
-                          ? "bg-emerald-50 text-emerald-600"
-                          : "bg-amber-50 text-amber-600"
+                          ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                          : "bg-amber-50 text-amber-600 border-amber-200"
                       }`}
                     >
                       {s.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="rounded-xl border border-[#ece8f8] px-3 py-1.5 text-xs font-semibold text-[#5b4e79] hover:bg-[#f6f4fd] transition-all">
+                  <td className="py-4 text-right">
+                    <button className="clay-btn-purple py-1.5 px-4 text-xs font-extrabold shadow-[0_4px_0_#7c62db]">
                       Details
                     </button>
                   </td>
@@ -206,7 +209,7 @@ export default function SettlementsPage() {
               ))}
               {filteredSettlements.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-sm font-semibold text-[#8a7fa8]">
+                  <td colSpan={8} className="py-12 text-center text-xs font-extrabold text-[#8a7fa8]">
                     No settlements found.
                   </td>
                 </tr>
@@ -216,49 +219,49 @@ export default function SettlementsPage() {
         </div>
 
         {/* Mobile View */}
-        <div className="block md:hidden divide-y divide-[#f6f4fd] p-4 space-y-4">
+        <div className="block md:hidden divide-y divide-[#f1effb] space-y-4">
           {filteredSettlements.map((s) => (
-            <div key={s.id} className="p-4 bg-[#faf9fe] rounded-2xl border border-[#ece8f8] space-y-3">
+            <div key={s.id} className="p-5 bg-white rounded-3xl border-2 border-[#f1effb] shadow-[0_6px_0_#e4e2f2] space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-[#241c3d]">{s.id}</span>
+                <span className="text-xs font-extrabold text-[#241c3d]">{s.id}</span>
                 <span
-                  className={`inline-block rounded-full px-2 py-0.5 text-[9px] font-bold ${
+                  className={`inline-block rounded-full px-2 py-0.5 text-[9px] font-extrabold border ${
                     s.status === "Paid"
-                      ? "bg-emerald-50 text-emerald-600"
-                      : "bg-amber-50 text-amber-600"
+                      ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                      : "bg-amber-50 text-amber-600 border-amber-200"
                   }`}
                 >
                   {s.status}
                 </span>
               </div>
 
-              <div className="pt-2 border-t border-[#f1eefb] space-y-1 text-left">
-                <p className="text-xs font-bold text-[#241c3d]">
+              <div className="pt-3 border-t border-[#f1effb] space-y-1.5 text-left">
+                <p className="text-xs font-extrabold text-[#241c3d]">
                   {s.ownerName}
                 </p>
-                <p className="text-[11px] text-[#5b4e79] font-medium">
+                <p className="text-[11px] text-[#5b4e79] font-bold">
                   {s.turfName}
                 </p>
-                <p className="text-[10px] text-[#8a7fa8]">
+                <p className="text-[10px] text-[#8a7fa8] font-bold">
                   Bank: {s.bankName} ({s.accountNo})
                 </p>
-                <p className="text-[10px] text-[#8a7fa8]">
+                <p className="text-[10px] text-[#8a7fa8] font-bold">
                   Payout Date: {s.payoutDate}
                 </p>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#f1eefb]">
+              <div className="flex items-center justify-between pt-3 border-t border-[#f1effb]">
                 <span className="text-xs font-black text-[#241c3d]">
                   {s.amount}
                 </span>
-                <button className="rounded-xl border border-[#ece8f8] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b4e79] hover:bg-[#f6f4fd] transition-all">
+                <button className="clay-btn-purple py-1.5 px-4 text-xs font-extrabold shadow-[0_4px_0_#7c62db]">
                   Inspect Bank Logs
                 </button>
               </div>
             </div>
           ))}
           {filteredSettlements.length === 0 && (
-            <div className="py-8 text-center text-sm font-semibold text-[#8a7fa8]">
+            <div className="py-8 text-center text-xs font-extrabold text-[#8a7fa8]">
               No payouts found.
             </div>
           )}

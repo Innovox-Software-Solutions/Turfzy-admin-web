@@ -61,15 +61,15 @@ export default function AuditLogsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7 pb-12 text-left">
       {/* Page Header */}
       <div>
-        <h2 className="text-2xl font-bold text-[#241c3d]">Audit Activity Logs</h2>
-        <p className="text-xs text-[#8a7fa8] mt-0.5">Track and review administrative actions, system modifications, and IP addresses</p>
+        <h2 className="text-2xl font-black text-[#241c3d]">Audit Activity Logs</h2>
+        <p className="text-xs text-[#8a7fa8] mt-0.5 font-bold">Track and review administrative actions, system modifications, and IP addresses</p>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-[#ece8f8] flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="clay-card-white p-4.5 flex flex-col md:flex-row gap-4 items-center justify-between">
         {/* Search */}
         <div className="relative w-full md:max-w-xs">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a79fc0]" />
@@ -78,61 +78,64 @@ export default function AuditLogsPage() {
             placeholder="Search action logs, admin..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-[#ece8f8] py-2 pl-10 pr-4 text-xs text-[#1e1b33] outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/10"
+            className="w-full clay-input py-2 pl-10 pr-4 text-xs text-[#1e1b33] placeholder:text-[#a79fc0]"
           />
         </div>
 
         {/* Filters */}
         <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-          {(["All", "Turfs", "Bookings", "Fees", "Settlements", "Users"] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setModuleFilter(tab)}
-              className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-all ${
-                moduleFilter === tab
-                  ? "bg-purple-600 text-white shadow-md shadow-purple-500/10"
-                  : "bg-[#f8f7fd] text-[#5b4e79] hover:bg-[#f3effc]"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          {(["All", "Turfs", "Bookings", "Fees", "Settlements", "Users"] as const).map((tab) => {
+            const isTabActive = moduleFilter === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => setModuleFilter(tab)}
+                className={`px-3 py-1.5 text-xs font-extrabold transition-all duration-150 ${
+                  isTabActive
+                    ? "clay-btn-purple shadow-[0_4px_0_#7c62db]"
+                    : "rounded-xl bg-[#f8f7fd] border-2 border-[#f1effb] text-[#5b4e79] hover:bg-[#f3effc]"
+                }`}
+              >
+                {tab}
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {/* Responsive Logs View */}
-      <div className="bg-white rounded-3xl border border-[#ece8f8] overflow-hidden shadow-sm">
+      <div className="clay-card-white overflow-hidden p-6">
         {/* Desktop View */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-[#f6f4fd] bg-[#faf9fe]">
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Log ID</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Admin Operator</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Action</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Module</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">Timestamp</th>
-                <th className="px-6 py-4.5 text-xs font-bold text-[#8a7fa8] uppercase">IP Address</th>
+              <tr className="border-b-2 border-[#f1effb] pb-3">
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Log ID</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Admin Operator</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Action</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Module</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">Timestamp</th>
+                <th className="pb-4 text-xs font-extrabold text-[#8a7fa8] uppercase">IP Address</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#f6f4fd]">
+            <tbody className="divide-y divide-[#f1effb]">
               {filteredLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-[#fcfbfe] transition-colors text-xs">
-                  <td className="px-6 py-4 font-bold text-[#241c3d]">{log.id}</td>
-                  <td className="px-6 py-4 font-bold text-[#5b4e79]">{log.adminName}</td>
-                  <td className="px-6 py-4 text-[#241c3d] font-semibold leading-relaxed max-w-sm">{log.action}</td>
-                  <td className="px-6 py-4">
-                    <span className="rounded bg-purple-50 border border-purple-100 text-[#7c3aed] text-[9px] font-bold px-2 py-0.5">
+                <tr key={log.id} className="hover:bg-[#faf9fd]/50 transition-colors text-xs">
+                  <td className="py-4 font-extrabold text-[#241c3d]">{log.id}</td>
+                  <td className="py-4 font-extrabold text-[#5b4e79]">{log.adminName}</td>
+                  <td className="py-4 text-[#241c3d] font-bold leading-relaxed max-w-sm">{log.action}</td>
+                  <td className="py-4">
+                    <span className="rounded-md bg-[#f3effc] border border-purple-100 text-[#7c3aed] text-[9px] font-extrabold px-2.5 py-0.5">
                       {log.module}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-[#8a7fa8] font-medium">{log.timestamp}</td>
-                  <td className="px-6 py-4 text-[#8a7fa8] font-mono">{log.ipAddress}</td>
+                  <td className="py-4 text-[#8a7fa8] font-bold">{log.timestamp}</td>
+                  <td className="py-4 text-[#8a7fa8] font-mono font-bold">{log.ipAddress}</td>
                 </tr>
               ))}
               {filteredLogs.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-sm font-semibold text-[#8a7fa8]">
+                  <td colSpan={6} className="py-12 text-center text-xs font-extrabold text-[#8a7fa8]">
                     No system log entries found.
                   </td>
                 </tr>
@@ -142,31 +145,31 @@ export default function AuditLogsPage() {
         </div>
 
         {/* Mobile View */}
-        <div className="block md:hidden divide-y divide-[#f6f4fd] p-4 space-y-4">
+        <div className="block md:hidden divide-y divide-[#f1effb] space-y-4">
           {filteredLogs.map((log) => (
-            <div key={log.id} className="p-4 bg-[#faf9fe] rounded-2xl border border-[#ece8f8] space-y-3">
+            <div key={log.id} className="p-5 bg-white rounded-3xl border-2 border-[#f1effb] shadow-[0_6px_0_#e4e2f2] space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-[#241c3d]">{log.id}</span>
+                <span className="text-xs font-extrabold text-[#241c3d]">{log.id}</span>
                 <span className="rounded bg-purple-50 border border-purple-100 text-[#7c3aed] text-[9px] font-bold px-2 py-0.5">
                   {log.module}
                 </span>
               </div>
 
-              <div className="pt-2 border-t border-[#f1eefb] space-y-1.5 text-left">
+              <div className="pt-3 border-t border-[#f1effb] space-y-1.5 text-left">
                 <p className="text-xs font-bold text-[#5b4e79]">{log.adminName}</p>
                 <p className="text-xs text-[#241c3d] font-semibold leading-relaxed">{log.action}</p>
-                <p className="text-[10px] text-[#8a7fa8] flex items-center gap-1">
+                <p className="text-[10px] text-[#8a7fa8] flex items-center gap-1 font-bold">
                   <Calendar className="h-3 w-3" />
                   {log.timestamp}
                 </p>
-                <p className="text-[10px] text-[#8a7fa8] font-mono">
+                <p className="text-[10px] text-[#8a7fa8] font-mono font-bold">
                   IP: {log.ipAddress}
                 </p>
               </div>
             </div>
           ))}
           {filteredLogs.length === 0 && (
-            <div className="py-8 text-center text-sm font-semibold text-[#8a7fa8]">
+            <div className="py-8 text-center text-xs font-extrabold text-[#8a7fa8]">
               No system log entries found.
             </div>
           )}
