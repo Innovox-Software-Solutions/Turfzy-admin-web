@@ -31,10 +31,58 @@ const categoryData = [
   { name: "11-a-side", value: 15, color: "#ffb3ba" },
 ];
 
+// Custom 3D Volumetric Cylinder Bar Shape Component
+const CustomBar = (props: any) => {
+  const { x, y, width, height, index } = props;
+  if (!height) return null;
+
+  const radius = width / 2;
+
+  return (
+    <g>
+      {/* 3D drop shadow replica */}
+      <rect
+        x={x + 3}
+        y={y + 4}
+        width={width}
+        height={height}
+        rx={radius}
+        ry={radius}
+        fill="#1d1637"
+        opacity={0.12}
+      />
+      
+      {/* Main cylinder bar */}
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        rx={radius}
+        ry={radius}
+        fill={`url(#barGrad-${index})`}
+      />
+      
+      {/* Glossy overlay reflection on the left side of the cylinder */}
+      <rect
+        x={x + 2.5}
+        y={y + 3}
+        width={width * 0.22}
+        height={height - 6}
+        rx={radius * 0.22}
+        ry={radius * 0.22}
+        fill="#ffffff"
+        opacity={0.25}
+      />
+    </g>
+  );
+};
+
 export default function AnalyticsPage() {
   const [timeframe, setTimeframe] = useState("Last 6 Months");
 
   const formatRevenueY = (value: number) => {
+    if (value === 0) return "₹0L";
     return `₹${value / 100000}L`;
   };
 
@@ -100,11 +148,47 @@ export default function AnalyticsPage() {
                     <stop offset="5%" stopColor="#9c83f3" stopOpacity={0.4} />
                     <stop offset="95%" stopColor="#9c83f3" stopOpacity={0} />
                   </linearGradient>
+                  {/* Drop shadow for the line path */}
+                  <filter id="clay-line-shadow" x="-10%" y="-10%" width="120%" height="130%">
+                    <feDropShadow dx="0" dy="6" stdDeviation="4" floodColor="#7c62db" floodOpacity="0.25" />
+                  </filter>
                 </defs>
                 <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fill: "#5b4e79", fontSize: 11, fontWeight: 700 }} />
-                <YAxis tickFormatter={formatRevenueY} tickLine={false} axisLine={false} tick={{ fill: "#5b4e79", fontSize: 11, fontWeight: 700 }} />
-                <Tooltip cursor={{ stroke: "#ebdffc" }} />
-                <Area type="monotone" dataKey="revenue" stroke="#9c83f3" strokeWidth={3} fill="url(#analyticsRevenue)" />
+                <YAxis
+                  ticks={[0, 950000, 1900000, 2850000, 3800000]}
+                  tickFormatter={formatRevenueY}
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fill: "#5b4e79", fontSize: 11, fontWeight: 700 }}
+                />
+                <Tooltip
+                  cursor={{ stroke: "#ebdffc" }}
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="rounded-3xl border-2 border-[#f1effb] bg-white px-5 py-3 shadow-[0_8px_16px_rgba(36,28,61,0.08),0_4px_0_#e4e2f2] text-left">
+                          <p className="text-xs font-black text-[#241c3d]">{data.month}</p>
+                          <p className="text-[10px] font-bold text-[#8a7fa8] uppercase tracking-wider mt-1">Revenue</p>
+                          <p className="text-sm font-extrabold text-purple-600 mt-0.5">
+                            ₹{payload[0].value?.toLocaleString()}
+                          </p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#9c83f3"
+                  strokeWidth={4.5}
+                  fill="url(#analyticsRevenue)"
+                  style={{
+                    filter: "url(#clay-line-shadow)",
+                  }}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -120,17 +204,38 @@ export default function AnalyticsPage() {
           <div className="h-44 w-full flex items-center justify-center relative mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
+                <defs>
+                  <linearGradient id="pieGrad-0" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#c7b3ff" />
+                    <stop offset="100%" stopColor="#7c5beb" />
+                  </linearGradient>
+                  <linearGradient id="pieGrad-1" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#ffa6bc" />
+                    <stop offset="100%" stopColor="#f5476a" />
+                  </linearGradient>
+                  <linearGradient id="pieGrad-2" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#ffd29d" />
+                    <stop offset="100%" stopColor="#e37207" />
+                  </linearGradient>
+                </defs>
                 <Pie
                   data={categoryData}
                   cx="50%"
                   cy="50%"
                   innerRadius={50}
                   outerRadius={65}
-                  paddingAngle={3}
+                  paddingAngle={4}
+                  cornerRadius={6}
                   dataKey="value"
                 >
                   {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={`url(#pieGrad-${index})`}
+                      style={{
+                        filter: "drop-shadow(2px 4px 5px rgba(29, 22, 55, 0.12))",
+                      }}
+                    />
                   ))}
                 </Pie>
               </PieChart>
@@ -165,15 +270,66 @@ export default function AnalyticsPage() {
         <div className="h-64 w-full mt-4">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={monthlyBookings} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <defs>
+                {/* Mon: Purple */}
+                <linearGradient id="barGrad-0" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#c7b3ff" />
+                  <stop offset="35%" stopColor="#ab8eff" />
+                  <stop offset="100%" stopColor="#7c5beb" />
+                </linearGradient>
+                {/* Tue: Pink */}
+                <linearGradient id="barGrad-1" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#ffa6bc" />
+                  <stop offset="35%" stopColor="#ff809b" />
+                  <stop offset="100%" stopColor="#f5476a" />
+                </linearGradient>
+                {/* Wed: Orange */}
+                <linearGradient id="barGrad-2" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#ffd29d" />
+                  <stop offset="35%" stopColor="#ffa048" />
+                  <stop offset="100%" stopColor="#e37207" />
+                </linearGradient>
+                {/* Thu: Yellow */}
+                <linearGradient id="barGrad-3" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#fff2be" />
+                  <stop offset="35%" stopColor="#ffd858" />
+                  <stop offset="100%" stopColor="#ebb118" />
+                </linearGradient>
+                {/* Fri: Green */}
+                <linearGradient id="barGrad-4" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#c5f2b4" />
+                  <stop offset="35%" stopColor="#8fe26b" />
+                  <stop offset="100%" stopColor="#5fb932" />
+                </linearGradient>
+                {/* Sat: Blue */}
+                <linearGradient id="barGrad-5" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#bce9ff" />
+                  <stop offset="35%" stopColor="#6dc5ff" />
+                  <stop offset="100%" stopColor="#2c8fe5" />
+                </linearGradient>
+              </defs>
+
               <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fill: "#5b4e79", fontSize: 11, fontWeight: 700 }} />
               <YAxis tickLine={false} axisLine={false} tick={{ fill: "#5b4e79", fontSize: 11, fontWeight: 700 }} />
-              <Tooltip cursor={{ fill: "#fbfafc" }} />
-              <Bar dataKey="bookings" radius={[8, 8, 8, 8]} barSize={24}>
-                {monthlyBookings.map((entry, index) => {
-                  const colors = ["#9c83f3", "#ff8b94", "#ffb3ba", "#fff0c7", "#bfeaff", "#ffc9c2"];
-                  return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
-                })}
-              </Bar>
+              <Tooltip
+                cursor={{ fill: "transparent" }}
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="rounded-3xl border-2 border-[#f1effb] bg-white px-5 py-3 shadow-[0_8px_16px_rgba(36,28,61,0.08),0_4px_0_#e4e2f2] text-center">
+                        <p className="text-xs font-black text-[#241c3d]">{data.month}</p>
+                        <p className="text-[10px] font-bold text-[#8a7fa8] uppercase tracking-wider mt-1">Bookings</p>
+                        <p className="text-sm font-extrabold text-[#7c5beb] mt-0.5">
+                          {payload[0].value?.toLocaleString()}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar dataKey="bookings" shape={<CustomBar />} barSize={22} />
             </BarChart>
           </ResponsiveContainer>
         </div>
