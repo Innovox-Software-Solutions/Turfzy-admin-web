@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 import {
   Mail,
   Lock,
@@ -13,6 +15,7 @@ import {
 } from "lucide-react";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,9 +25,11 @@ export default function LoginPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // TODO: wire up to your auth endpoint
+    // Simulate API request
     await new Promise((r) => setTimeout(r, 900));
+    Cookies.set("auth_token", "dummy-auth-token-12345", { expires: rememberMe ? 7 : 1 });
     setIsSubmitting(false);
+    router.push("/dashboard");
   };
 
   return (
@@ -217,19 +222,6 @@ export default function LoginPage() {
                 <ArrowRight className="h-4 w-4" />
               </button>
 
-              <div className="flex items-center gap-3 pt-1">
-                <span className="h-px flex-1 bg-[#ece7f7]" />
-                <span className="text-xs font-medium text-[#a79fc0]">OR</span>
-                <span className="h-px flex-1 bg-[#ece7f7]" />
-              </div>
-
-              <button
-                type="button"
-                className="w-full flex items-center justify-center gap-2 rounded-xl border border-[#e6e1f2] bg-white py-3.5 text-sm font-semibold text-[#4b4360] transition hover:bg-[#faf9fd]"
-              >
-                <ShieldCheck className="h-4.5 w-4.5 text-[#7c3aed]" />
-                Login with OTP
-              </button>
             </form>
 
             <p className="mt-7 text-center text-xs text-[#a79fc0]">
@@ -241,7 +233,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes wave {
           0%, 60%, 100% { transform: rotate(0deg); }
           10% { transform: rotate(14deg); }
@@ -250,7 +242,7 @@ export default function LoginPage() {
           40% { transform: rotate(-4deg); }
           50% { transform: rotate(10deg); }
         }
-      `}</style>
+      `}} />
     </div>
   );
 }

@@ -17,8 +17,11 @@ import {
   Crown,
   ChevronDown,
   X,
+  LogOut,
 } from "lucide-react";
 import { useUIStore } from "@/store/ui.store";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 // Custom Turf/Soccer Pitch Icon
 const TurfIcon = (props: any) => (
@@ -46,7 +49,13 @@ interface SidebarItem {
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { sidebarOpen, setSidebarOpen } = useUIStore();
+
+  const handleLogout = () => {
+    Cookies.remove("auth_token");
+    router.push("/login");
+  };
 
   const menuItems: SidebarItem[] = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -79,9 +88,9 @@ export default function Sidebar() {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Top Header & Close Button */}
-        <div>
-          <div className="flex items-center justify-between">
+        {/* Top Header & Navigation Container */}
+        <div className="flex flex-col flex-1 min-h-0">
+          <div className="flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
               <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#5b21b6] shadow-lg shadow-purple-500/30 flex items-center justify-center text-white">
                 <TurfIcon className="h-5.5 w-5.5" />
@@ -100,7 +109,7 @@ export default function Sidebar() {
           </div>
 
           {/* Navigation Links */}
-          <nav className="mt-8 space-y-1">
+          <nav className="mt-8 space-y-1 flex-1 overflow-y-auto pr-1 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-purple-100 [&::-webkit-scrollbar-thumb]:rounded-full">
             {menuItems.map((item) => {
               const isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/");
               const Icon = item.icon;
@@ -142,7 +151,7 @@ export default function Sidebar() {
         </div>
 
         {/* Bottom Section: Premium Card & User Profile */}
-        <div className="mt-6 space-y-6">
+        <div className="mt-6 space-y-6 flex-shrink-0">
           {/* Go Premium Card */}
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#fdfbf7] to-[#fbf8f0] border border-[#f5efe2] p-4.5">
             <div className="flex items-center gap-2">
@@ -174,8 +183,12 @@ export default function Sidebar() {
                 <p className="text-[11px] font-medium text-[#8a7fa8]">Super Admin</p>
               </div>
             </div>
-            <button className="rounded-lg p-1 text-[#8a7fa8] hover:bg-[#f6f4fd] hover:text-[#241c3d]">
-              <ChevronDown className="h-4.5 w-4.5" />
+            <button
+              onClick={handleLogout}
+              className="rounded-lg p-1.5 text-[#8a7fa8] hover:bg-rose-50 hover:text-rose-600 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="h-4.5 w-4.5" />
             </button>
           </div>
         </div>
