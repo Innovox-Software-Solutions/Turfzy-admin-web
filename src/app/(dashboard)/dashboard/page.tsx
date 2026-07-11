@@ -143,9 +143,9 @@ export default function DashboardPage() {
 
   // Map financial data to donut chart
   const settlementData = [
-    { name: "Completed Settlements", value: stats.completedSettlements || 1, color: "#9c83f3" },
-    { name: "Pending Settlements", value: stats.pendingSettlements || 0, color: "#ff8b94" },
-    { name: "Platform Fees Earned", value: stats.platformFeeEarned || 0, color: "#ffb3ba" },
+    { name: "Completed Settlements", value: stats.completedSettlements ?? 0, color: "#9c83f3" },
+    { name: "Pending Settlements", value: stats.pendingSettlements ?? 0, color: "#ff8b94" },
+    { name: "Platform Fees Earned", value: stats.platformFeeEarned ?? 0, color: "#ffb3ba" },
   ];
 
   const totalFinanceValue = settlementData.reduce((acc, curr) => acc + curr.value, 0);
