@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, CalendarRange, Clock, CreditCard, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet, FileDown } from "lucide-react";
+import { Search, CalendarRange, Clock, CreditCard, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet, FileDown, RefreshCw } from "lucide-react";
 import { useBookingsStore } from "@/store/bookings.store";
 import { BookingStatus, PaymentStatus } from "@/types/bookings";
 import { TableSkeleton, CardSkeleton } from "@/components/ui/skeleton-loaders";
@@ -203,6 +203,24 @@ export default function BookingsPage() {
                   {stats?.CANCELLED.toLocaleString() ?? "..."}
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Card 5: Refunds – full width accent card */}
+          <div className="col-span-2 rounded-2xl border-2 border-blue-100 bg-gradient-to-r from-blue-50 via-white to-blue-50 p-3.5 sm:p-4 flex items-center justify-between shadow-[0_6px_0_#dbeafe] min-w-0">
+            <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center text-white clay-icon-blue flex-shrink-0">
+                <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[9px] sm:text-[10px] font-bold text-blue-700 uppercase truncate">Refunds</p>
+                <p className="text-base sm:text-xl font-black text-[#241c3d] mt-0.5 truncate">
+                  {stats?.REFUNDED.toLocaleString() ?? "..."}
+                </p>
+              </div>
+            </div>
+            <div className="text-[9px] font-extrabold text-blue-600 bg-blue-100 border border-blue-200 rounded-full px-2.5 py-0.5 flex-shrink-0">
+              Refund Stage
             </div>
           </div>
         </div>
